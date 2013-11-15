@@ -37,6 +37,9 @@ gem 'rails_admin'
 gem 'devise'
 
 gem 'mysql2', '0.3.11'
+gem 'thin'
+gem 'bootstrap-sass'
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
