@@ -39,6 +39,7 @@ gem 'devise'
 gem 'mysql2', '0.3.11'
 gem 'thin'
 gem 'bootstrap-sass'
+gem 'font-awesome-rails'
 
 
 # Use ActiveModel has_secure_password
