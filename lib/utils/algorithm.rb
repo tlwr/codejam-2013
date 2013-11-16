@@ -6,8 +6,16 @@ module Utils
     #Return a 6*1 matrices with all the coefficnets
     def self.compute_coefs(x, y)
       #Add an row of 1 at the beginning of each matrices for finding b0
-      x = Matrix.rows(x.to_a.unshift(Array.new(x.column_count, 1)))
-      y = Matrix.rows(y.to_a.unshift([1]))
+      array = [Array.new(x.row_size, 1)]
+      (0...x.column_size).each do |index|
+        array.append(x.column(index))
+      end
+      x = Matrix.columns(array)
+=begin
+      puts 'x: ' + (x.transpose*x).row_size.to_s + ' ' + (x.transpose*x).column_size.to_s
+      puts (x.transpose*x)
+      puts '------------'
+=end
       ((x.transpose*x).inverse)*(x.transpose*y)
     end
 
@@ -16,17 +24,16 @@ module Utils
       curve = Curve.new
       curve.value=value
 
-      x = get_matrix_from_column(csv, [Csv::RADIATION, Csv::HUMIDITY, Csv::TEMPERATURE, Csv::WINDSPEED, CSV::Time])
+      x = get_matrix_from_column(csv, [Csv::RADIATION, Csv::HUMIDITY, Csv::TEMPERATURE, Csv::WINDSPEED, Csv::TIME])
       y = get_matrix_from_column(csv, [Csv::CONSUMPTION])
-      coefs = compute_coefs(x, y)
-
-      curve.coef_offset=coefs[Coef::OFFSET]
-      curve.coef_radiation=coefs[Coef::RADIATION]
-      curve.coef_humidity=coefs[Coef::HUMIDITY]
-      curve.coef_temperature=coefs[Coef::TEMPERATURE]
-      curve.coef_wind=coefs[Coef::WINDSPEED]
-      curve.coef_time=coefs[Coef::TIME]
-
+      coefs = compute_coefs(x, y).to_a
+      curve.coef_offset=coefs[Coef::OFFSET][0]
+      curve.coef_radiation=coefs[Coef::RADIATION][0]
+      curve.coef_humidity=coefs[Coef::HUMIDITY][0]
+      curve.coef_temperature=coefs[Coef::TEMPERATURE][0]
+      curve.coef_wind=coefs[Coef::WINDSPEED][0]
+      curve.coef_time=coefs[Coef::TIME][0]
+      curve.delta= compute_delta(csv, curve)
       if curve.value.nil?
         curve.value = compute_avg_value_using_similar_curves(curve)
       end
@@ -37,24 +44,27 @@ module Utils
     #The csv matrix sent needs to have n rows
     def self.compute_delta(csv, curve)
       delta = 0
-      (0...csv.row_count).each do |i|
-        row = curve.row(i)
-        delta = (row[Csv::CONSUMPTION] - compute_consumption(row, curve)).abs
+      (0...csv.row_size).each do |i|
+        row = csv.row(i)
+        delta += (row[Csv::CONSUMPTION] - compute_consumption(row, curve)).abs
       end
+      delta
     end
 
     #Compute the consumption using the params value and the curve
     def self.compute_consumption(row, curve)
-      row[Csv::RADIATION]*curve.coef_radiation
-      +row[Csv::HUMIDITY]*curve.coef_humidity
-      +row[Csv::TEMPERATURE]*curve.coef_temperature
-      +row[Csv::WINDSPEED]*curve.coef_wind
-      +row[Csv::TIME]*curve.coef_time
-      +curve.coef_offset
+      result = row[Csv::RADIATION]*curve.coef_radiation
+      result += row[Csv::HUMIDITY]*curve.coef_humidity
+      result += row[Csv::TEMPERATURE]*curve.coef_temperature
+      result += row[Csv::WINDSPEED]*curve.coef_wind
+      result += row[Csv::TIME]*curve.coef_time
+      result += curve.coef_offset
+      result
     end
 
     #Create a new matrix using only the given column
     def self.get_matrix_from_column(csv, cols)
+      csv.column(0)
       Matrix.columns(cols.map { |col| csv.column(col) })
     end
 
@@ -92,7 +102,7 @@ module Utils
 
     #Get the last rows in the matrix
     #Can specify at what point you consider the end
-    def self.get_last_n_rows(csv, start = csv.row_count)
+    def self.get_last_n_rows(csv, start = csv.row_size)
       array = []
       (1..Constant::N).each do |i|
         array << csv.row(start-i)
@@ -114,7 +124,7 @@ module Utils
       last_set_row = nil
       array = csv.to_a
       array.each do |row|
-        if row[Csv::RADIATION].nil? or row[Csv::RADIATION].empty?
+        if row[Csv::RADIATION].nil? or row[Csv::RADIATION]== 0.0
           row[Csv::RADIATION] = last_set_row[Csv::RADIATION]
           row[Csv::HUMIDITY] = last_set_row[Csv::HUMIDITY]
           row[Csv::TEMPERATURE] = last_set_row[Csv::TEMPERATURE]
@@ -126,6 +136,26 @@ module Utils
       Matrix.rows(array)
     end
 
+    def self.time_to_f(time)
+      time.sec+time.min*60+time.hour*3600
+    end
+
+
+    def self.csv_to_matrix(csv)
+      CSV.parse(string) do |row|
+        m = []
+        next if row[0] == 'Date'
+        m[Utils::Csv::DATE] = DateTime.parse(row[0])
+        m[Utils::Csv::RADIATION] = row[1].to_f
+        m[Utils::Csv::HUMIDITY] = row[2].to_f
+        m[Utils::Csv::TEMPERATURE] = row[3].to_f
+        m[Utils::Csv::WINDSPEED] = row[4].to_f
+        m[Utils::Csv::TIME] = Utils::Algorithm::time_to_f(Time.parse(row[0]))
+        m[Utils::Csv::CONSUMPTION] = row[5].to_f
+        acc << m
+      end
+      Matrix.rows(acc)
+    end
   end
 
 end

@@ -11,6 +11,7 @@ module Utils
 
   module Constant
     N=20
+    MAX_DELTA=17000*N/4
   end
 
 end
