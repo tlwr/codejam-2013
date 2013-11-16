@@ -2,27 +2,28 @@
 <html>
 <head>
   <title>Codejam2013dreamtim</title>
-  <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
   <%= csrf_meta_tags %>
 </head>
 <body>
 <div class='wrapper'>
-  <div class="container">
-    <div class="header">
-      <ul class="nav nav-pills pull-right">
-        <li><a href="#">dreamtim</a></li>
-        <li><a href="#">about</a></li>
-        <li><a href="#">contact</a></li>
+  <div class='container'>
+    <div class='header'>
+      <ul class='nav nav-pills pull-right'>
+        <li><a href='#'>dreamtim</a></li>
+        <li><a href='#'>about</a></li>
+        <li><a href='#'>contact</a></li>
       </ul>
-      <h3 class="text-muted">doth thou even ruby</h3>
+      <h3 class='text-muted'>doth thou even ruby</h3>
     </div>
     <%= yield %>
     <div class='push'></div>
   </div>
 </div>
 <div class='container'>
-  <div class="footer">
+  <div class='footer text-center'>
     <p>&copy; toti 2013</p>
   </div>
 </div>

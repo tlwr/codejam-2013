@@ -15,6 +15,11 @@
 @import "bootstrap";
 @import "font-awesome";
 
+*:not(.fa):not(.glyphicon)
+{
+  font-family: 'Open Sans', sans-serif !important;
+}
+
 /* Space out content a bit */
 body {
   padding-top: 20px;
