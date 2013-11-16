@@ -7,6 +7,7 @@ Codejam2013dreamtim::Application.routes.draw do
   get 'learn',to: 'pages#empty'
 
   post 'csv', to: 'csv#upload'
+  get 'csvl', to: 'csv#local'
   get 'csv', to: 'pages#machine'
 
   # The priority is based upon order of creation: first created -> highest priority.
