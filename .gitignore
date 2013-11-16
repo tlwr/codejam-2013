@@ -16,3 +16,6 @@
 /tmp
 
 .idea/
+.idea/*
+.idea
+gemfile.lock
