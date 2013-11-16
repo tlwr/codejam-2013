@@ -17,6 +17,15 @@ class CsvController < ApplicationController
     end
   end
 
+  def local
+    file = File.open('sample_input.csv')
+    matrix = Utils::Algorithm::csv_to_matrix(file.read)
+    (0...matrix.row_size).each do |i|
+      puts matrix.get_row(i)[Utils::Csv::CONSUMPTION]
+    end
+    puts '-----------------'
+    render :text => matrix, :status => 200
+  end
 
 
 end
