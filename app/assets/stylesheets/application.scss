@@ -132,3 +132,14 @@ pre>code {
   font-size: 1em;
   color: $lightblue;
 }
+
+.dropdown-submenu>a:after
+{
+  content: none;
+}
+
+.dropdown-submenu input[type='number']
+{
+  position: relative;
+  top: 5px;
+}
