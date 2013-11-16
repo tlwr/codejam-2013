@@ -14,7 +14,12 @@
       <ul class='nav nav-pills pull-right'>
         <li><a href='#'>dreamtim</a></li>
         <li><a href='#'>about</a></li>
-        <li><a href='#'>contact</a></li>
+        <% if current_user %>
+          <li><%= link_to 'log out', destroy_user_session_path, :method => :delete %></li>
+        <% else %>
+          <li><%= link_to 'sign up', new_user_registration_path %></li>
+          <li><%= link_to 'log in', new_user_session_path %></li>
+        <% end %>
       </ul>
       <h3 class='text-muted'>doth thou even ruby</h3>
     </div>
