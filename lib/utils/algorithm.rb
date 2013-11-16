@@ -141,7 +141,7 @@ module Utils
     end
 
 
-    def self.csv_to_matrix(csv)
+    def self.csv_to_matrix(string)
       CSV.parse(string) do |row|
         m = []
         next if row[0] == 'Date'
