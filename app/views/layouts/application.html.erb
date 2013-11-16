@@ -14,7 +14,7 @@
     <div class='header'>
       <ul class='nav nav-pills pull-right'>
         <li><a href='<%= root_path %>'>home</a></li>
-        <li><a href='#'>requests</a></li>
+        <li><a href='<%= settings_path %>'>settings</a></li>
         <% if current_user %>
           <li><%= link_to 'log out', destroy_user_session_path, :method => :delete %></li>
         <% else %>
@@ -22,7 +22,7 @@
           <li><%= link_to 'log in', new_user_session_path %></li>
         <% end %>
       </ul>
-      <h3 class='text-muted'>mcgill power dashboard</h3>
+      <h4 class='text-muted'>mcgill power dashboard</h4>
     </div>
     <%= yield %>
     <div class='push'></div>

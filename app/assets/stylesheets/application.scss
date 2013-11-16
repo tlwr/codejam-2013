@@ -17,8 +17,7 @@
 
 $lightblue: #0088cc;
 
-*:not(.fa):not(.glyphicon)
-{
+*:not(.fa):not(.glyphicon) {
   font-family: 'Open Sans', sans-serif !important;
 }
 
@@ -39,6 +38,7 @@ body {
 /* Custom page header */
 .header {
   border-bottom: 1px solid #e5e5e5;
+  padding: 10px;
 }
 
 /* Make the masthead heading the same height as the navigation */
@@ -121,16 +121,14 @@ html, body {
   height: 4em;
 }
 
-pre
-{
+pre {
   width: 100%;
   border: none;
   box-shadow: 0px 0px 5px #dfdfdf;
   background-color: #222222;
 }
 
-pre>code
-{
+pre>code {
   font-size: 1em;
   color: $lightblue;
 }
