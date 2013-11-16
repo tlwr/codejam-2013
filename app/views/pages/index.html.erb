@@ -1,3 +1,9 @@
+<div class='text-center'>
+  <h1>power usage</h1>
+  <p>predicted <strong><%= @power %></strong>W at <%= @time.strftime('%H:%M') %></p>
+  <hr>
+</div>
+
 <div id='graphcontain'>
-  <%= line_chart(((1..100).to_a.sample 5).zip(1..5),{})%>
+  <%= area_chart(((1..100000).to_a.sample 128).zip(1..128),{})%>
 </div>
