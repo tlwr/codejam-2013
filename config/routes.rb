@@ -5,10 +5,10 @@ Codejam2013dreamtim::Application.routes.draw do
   root 'pages#index'
   get 'settings', to: 'pages#settings'
   get 'learn',to: 'pages#empty'
-
-  post 'csv', to: 'csv#upload'
   get 'csvl', to: 'csv#local'
   get 'csv', to: 'pages#machine'
+  post 'wattsettings', to: 'settings#watts'
+  post 'csv', to: 'csv#upload'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
