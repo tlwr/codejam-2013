@@ -8,9 +8,6 @@ class PagesController < ApplicationController
     @points = 128
   end
 
-  def settings
-  end
-
   def empty
     Curve.delete_all
     acc = []
