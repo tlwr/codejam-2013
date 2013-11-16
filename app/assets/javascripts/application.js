@@ -16,3 +16,41 @@
 //= require bootstrap
 //= require chartkick
 //= require_tree .
+
+
+$(document).ready(function () {
+    $('#settings_high').keyup(function () {
+        settingshigh()
+    });
+    $('#settings_high').change(function () {
+        settingshigh()
+    });
+    $('#settings_low').keyup(function () {
+        settingslow()
+    });
+    $('#settings_low').change(function () {
+        settingslow()
+    });
+});
+
+settingshigh = function () {
+    console.log($('#settings_high').val());
+    settingsmaintain();
+}
+
+settingslow = function () {
+    console.log($('#settings_low').val());
+    settingsmaintain();
+}
+
+settingsmaintain = function () {
+    if ($('#settings_low').val() > $('#settings_high').val()) {
+        $('#settings_low').val(0);
+    }
+    if ($('#settings_low').val() < 0) {
+        $('#settings_low').val(0);
+    }
+    if ($('#settings_high').val() < 0) {
+        $('#settings_high').val(0);
+    }
+}

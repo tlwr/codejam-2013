@@ -15,8 +15,9 @@
 @import "bootstrap";
 @import "font-awesome";
 
-*:not(.fa):not(.glyphicon)
-{
+$lightblue: #0088cc;
+
+*:not(.fa):not(.glyphicon) {
   font-family: 'Open Sans', sans-serif !important;
 }
 
@@ -37,6 +38,7 @@ body {
 /* Custom page header */
 .header {
   border-bottom: 1px solid #e5e5e5;
+  padding: 10px;
 }
 
 /* Make the masthead heading the same height as the navigation */
@@ -117,4 +119,27 @@ html, body {
 
 .footer, .push {
   height: 4em;
+}
+
+pre {
+  width: 100%;
+  border: none;
+  box-shadow: 0px 0px 5px #dfdfdf;
+  background-color: #222222;
+}
+
+pre>code {
+  font-size: 1em;
+  color: $lightblue;
+}
+
+.dropdown-submenu>a:after
+{
+  content: none;
+}
+
+.dropdown-submenu input[type='number']
+{
+  position: relative;
+  top: 5px;
 }
