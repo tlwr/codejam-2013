@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  value: 1.5
+  coef_radiation: 1.5
+  coef_humidity: 1.5
+  coef_temperature: 1.5
+  coef_wind: 1.5
+  coef_offset: 1.5
+  coef_time: 1.5
+  delta: 1.5
+
+two:
+  value: 1.5
+  coef_radiation: 1.5
+  coef_humidity: 1.5
+  coef_temperature: 1.5
+  coef_wind: 1.5
+  coef_offset: 1.5
+  coef_time: 1.5
+  delta: 1.5

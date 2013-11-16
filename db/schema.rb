@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131115211633) do
+ActiveRecord::Schema.define(version: 20131116060711) do
+
+  create_table "curves", force: true do |t|
+    t.float    "value"
+    t.float    "coef_radiation"
+    t.float    "coef_humidity"
+    t.float    "coef_temperature"
+    t.float    "coef_wind"
+    t.float    "coef_offset"
+    t.float    "coef_time"
+    t.float    "delta"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rails_admin_histories", force: true do |t|
     t.text     "message"
