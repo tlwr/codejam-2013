@@ -37,10 +37,10 @@ gem 'rails_admin'
 gem 'devise'
 
 gem 'mysql2', '0.3.11'
-gem 'shopify_app'
 gem 'thin'
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
+gem 'chartkick'
 
 
 # Use ActiveModel has_secure_password
