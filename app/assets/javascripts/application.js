@@ -19,6 +19,9 @@
 
 
 $(document).ready(function () {
+    window.setInterval(function () {
+        settingspost();
+    }, 2000);
     $('#settings_high').keyup(function () {
         settingshigh()
     });
@@ -34,12 +37,10 @@ $(document).ready(function () {
 });
 
 settingshigh = function () {
-    console.log($('#settings_high').val());
     settingsmaintain();
 }
 
 settingslow = function () {
-    console.log($('#settings_low').val());
     settingsmaintain();
 }
 
@@ -53,4 +54,11 @@ settingsmaintain = function () {
     if ($('#settings_high').val() < 0) {
         $('#settings_high').val(0);
     }
+}
+
+settingspost = function () {
+    settingsmaintain();
+    var high = $('#settings_high').val();
+    var low = $('#settings_low').val();
+    $.post('/wattsettings', { settings_high: high, settings_low: low });
 }
