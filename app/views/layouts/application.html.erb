@@ -12,7 +12,7 @@
   <div class='container'>
     <div class='header'>
       <ul class='nav nav-pills pull-right'>
-        <li><a href='#'>dreamtim</a></li>
+        <li><a href='<%= root_path %>'>dreamtim</a></li>
         <li><a href='#'>about</a></li>
         <% if current_user %>
           <li><%= link_to 'log out', destroy_user_session_path, :method => :delete %></li>
