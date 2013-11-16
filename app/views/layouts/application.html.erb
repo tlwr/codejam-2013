@@ -7,18 +7,23 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <ul class="nav nav-pills pull-right">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-    <h3 class="text-muted">Project name</h3>
+<div class='wrapper'>
+  <div class="container">
+    <div class="header">
+      <ul class="nav nav-pills pull-right">
+        <li><a href="#">dreamtim</a></li>
+        <li><a href="#">about</a></li>
+        <li><a href="#">contact</a></li>
+      </ul>
+      <h3 class="text-muted">doth thou even ruby</h3>
+    </div>
+    <%= yield %>
+    <div class='push'></div>
   </div>
-  <%= yield %>
+</div>
+<div class='container'>
   <div class="footer">
-    <p>&copy; Company 2013</p>
+    <p>&copy; toti 2013</p>
   </div>
 </div>
 </body>
