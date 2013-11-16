@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131116060711) do
+ActiveRecord::Schema.define(version: 20131116162541) do
 
   create_table "curves", force: true do |t|
     t.float    "value"
@@ -22,6 +22,18 @@ ActiveRecord::Schema.define(version: 20131116060711) do
     t.float    "coef_offset"
     t.float    "coef_time"
     t.float    "delta"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "points", force: true do |t|
+    t.date     "date"
+    t.float    "radiation"
+    t.float    "humidity"
+    t.float    "temperature"
+    t.float    "windspeed"
+    t.time     "time"
+    t.float    "consumption"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

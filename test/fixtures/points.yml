@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  date: 2013-11-16
+  radiation: 1.5
+  humidity: 1.5
+  temperature: 1.5
+  windspeed: 1.5
+  time: 2013-11-16 11:25:41
+  consumption: 1.5
+
+two:
+  date: 2013-11-16
+  radiation: 1.5
+  humidity: 1.5
+  temperature: 1.5
+  windspeed: 1.5
+  time: 2013-11-16 11:25:41
+  consumption: 1.5

@@ -1,3 +1,5 @@
+
+
 class PagesController < ApplicationController
   def index
     t = Time.new
