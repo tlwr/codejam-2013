@@ -4,6 +4,7 @@ Codejam2013dreamtim::Application.routes.draw do
 
   root 'pages#index'
   get 'settings', to: 'pages#settings'
+  get 'learn',to: 'pages#empty'
 
   post 'csv', to: 'csv#upload'
   get 'csv', to: 'csv#upload'
