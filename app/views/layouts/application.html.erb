@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Codejam2013dreamtim</title>
+  <title>McGill Power Dashboard</title>
+  <%= javascript_include_tag 'http://www.google.com/jsapi', 'chartkick' %>
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
-  <%= javascript_include_tag 'http://www.google.com/jsapi', 'chartkick' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -13,8 +13,8 @@
   <div class='container'>
     <div class='header'>
       <ul class='nav nav-pills pull-right'>
-        <li><a href='<%= root_path %>'>dreamtim</a></li>
-        <li><a href='#'>about</a></li>
+        <li><a href='<%= root_path %>'>home</a></li>
+        <li><a href='#'>requests</a></li>
         <% if current_user %>
           <li><%= link_to 'log out', destroy_user_session_path, :method => :delete %></li>
         <% else %>
@@ -22,7 +22,7 @@
           <li><%= link_to 'log in', new_user_session_path %></li>
         <% end %>
       </ul>
-      <h3 class='text-muted'>doth thou even ruby</h3>
+      <h3 class='text-muted'>mcgill power dashboard</h3>
     </div>
     <%= yield %>
     <div class='push'></div>
