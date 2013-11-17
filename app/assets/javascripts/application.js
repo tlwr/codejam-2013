@@ -20,45 +20,45 @@
 
 $(document).ready(function () {
     window.setInterval(function () {
+        settingsmaintain();
         settingspost();
     }, 2000);
     $('#settings_high').keyup(function () {
-        settingshigh()
+        settingshigh();
     });
     $('#settings_high').change(function () {
-        settingshigh()
+        settingshigh();
     });
     $('#settings_low').keyup(function () {
-        settingslow()
+        settingslow();
     });
     $('#settings_low').change(function () {
-        settingslow()
+        settingslow();
     });
 });
 
 settingshigh = function () {
     settingsmaintain();
-}
+};
 
 settingslow = function () {
     settingsmaintain();
-}
+};
 
 settingsmaintain = function () {
-    if ($('#settings_low').val() > $('#settings_high').val()) {
+    if (parseInt($('#settings_low').val()) > parseInt($('#settings_high').val())) {
         $('#settings_low').val(0);
     }
-    if ($('#settings_low').val() < 0) {
+    if (parseInt($('#settings_low').val()) < 0) {
         $('#settings_low').val(0);
     }
-    if ($('#settings_high').val() < 0) {
+    if (parseInt($('#settings_high').val()) < 0) {
         $('#settings_high').val(0);
     }
-}
+};
 
 settingspost = function () {
-    settingsmaintain();
     var high = $('#settings_high').val();
     var low = $('#settings_low').val();
     $.post('/wattsettings', { settings_high: high, settings_low: low });
-}
+};
