@@ -5,13 +5,10 @@ require 'rufus/scheduler'
 
 
 task :load_pulse_energy => :environment do
-
+  run
 end
 
 def run
-  p = Point.new
-  p.radiation = 10
-  p.save
   scheduler = Rufus::Scheduler.new
   scheduler.every '1m' do
     sleep(30)
