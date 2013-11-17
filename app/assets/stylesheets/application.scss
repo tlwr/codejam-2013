@@ -18,7 +18,7 @@
 
 $lightblue: #0088cc;
 
-*:not(.fa):not(.glyphicon) {
+*:not(.fa):not(.glyphicon):not(*[class*=icon]) {
   font-family: 'Open Sans', sans-serif !important;
 }
 
