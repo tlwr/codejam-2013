@@ -34,9 +34,6 @@ module Utils
       curve.coef_wind=coefs[Coef::WINDSPEED][0]
       curve.coef_time=coefs[Coef::TIME][0]
       curve.delta= compute_delta(csv, curve)
-      if curve.value.nil?
-        curve.value = compute_avg_value_using_similar_curves(curve)
-      end
       curve
     end
 
@@ -79,24 +76,28 @@ module Utils
     end
 
     #Get all the simmilar curves in the database to the given one
-    def self.get_all_similar_curves(curve)
-      simlar_curves = []
+    def self.get_all_similar_curves(csv)
+      simlar_curves = {}
       Curve.all.each do |compare_curve|
-        if compare_curve(curve, compare_curve)
-          simlar_curves << compare_curve
+        delta = compute_delta(csv, compare_curve)
+        if  delta <= 4000
+          simlar_curves[compare_curve] = delta
         end
       end
       simlar_curves
     end
 
     #Get the predicated value using all the similar curve we have found
-    def self.compute_avg_value_using_similar_curves(curve)
-      result = 0
-      coef = 0
-      get_all_similar_curves(curve).each do |curve|
-        coef += 1/curve.delta
-        result += curve.value*coef
+    def self.compute_avg_value_using_similar_curves(curve, csv)
+      result = 0.0
+      coef = 0.0
+      sim = get_all_similar_curves(csv)
+      puts 'Simi:  ' + sim.size.to_s
+      sim.each do |curve, delta|
+        coef += 1
+        result += curve.value
       end
+      puts 'Coef: ' + coef.to_s
       result/coef
     end
 
@@ -110,12 +111,42 @@ module Utils
       Matrix.rows(array)
     end
 
+    def self.get_last_rows(csv, start = csv.row_size, nb = Constant::N)
+      array = []
+      (1..nb).each do |i|
+        array << csv.row(start-i)
+      end
+      Matrix.rows(array)
+    end
+
     #Forcast the next value in the csv using the given row_index
     def self.forcast_next_value(full_csv, row_index)
-      csv = get_last_n_rows(full_csv, row_index)
-      curve = get_curve(csv)
-      curve.save
-      curve.value
+      array = [-1, 5, 20, 96, 999]
+      coefs = 0.0
+      result = 0.0
+      array.each do |nb|
+        begin
+
+          value = 0.0
+          coef = 0.0
+          if nb == -1
+            value = general_curve(full_csv.row(row_index))
+            puts 'GENE: ' + value.to_s
+            coef = 1678
+          else
+            csv = get_last_rows(full_csv, row_index, nb)
+            curve = get_curve(csv)
+            value = compute_consumption(full_csv.row(row_index), curve)
+            delta = compute_delta(csv, curve)
+            coef = delta/nb
+          end
+          coefs += 1/(coef**2)
+          result += value/(coef**2)
+        rescue ExceptionForMatrix::ErrNotRegular => exp
+          puts ' errpr not regular wtf '
+        end
+      end
+      result/coefs
     end
 
     #TODO spline
@@ -156,6 +187,21 @@ module Utils
         acc << m
       end
       Matrix.rows(acc)
+    end
+
+    def self.general_curve(row)
+      val = row[Utils::Csv::RADIATION]*6.366220067822319
+      val += row[Utils::Csv::HUMIDITY]*1427.5721800736064
+      val += row[Utils::Csv::TEMPERATURE]*56.918239470698005
+      val += row[Utils::Csv::WINDSPEED]*-6.746236762662363
+      val += row[Utils::Csv::TIME]*0.02188813826348701
+      val += 14444.072665824584
+    end
+
+    def self.update_csv(csv, x, y, val)
+      array = csv.to_a
+      array[x][y]= val
+      Matrix.rows(array)
     end
   end
 

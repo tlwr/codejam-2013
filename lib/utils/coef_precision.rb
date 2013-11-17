@@ -1,12 +1,12 @@
 module Utils
 
   module CoefPrecision
-    OFFSET=1
-    RADIATION=0.1
-    HUMIDITY=0.1
-    TEMPERATURE=0.1
-    WINDSPEED=0.1
-    TIME=0.1
+    OFFSET=200
+    RADIATION=0.5
+    HUMIDITY=300
+    TEMPERATURE=7
+    WINDSPEED=10
+    TIME=0.005
   end
 
 end
