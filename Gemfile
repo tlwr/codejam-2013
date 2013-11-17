@@ -41,6 +41,7 @@ gem 'thin'
 gem 'bootstrap-sass'
 gem 'chartkick'
 gem 'font-awesome-rails'
+gem 'whenever'
 
 
 # Use ActiveModel has_secure_password
