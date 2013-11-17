@@ -51,7 +51,7 @@ class CsvController < ApplicationController
           array[array.size-1][Utils::Csv::TEMPERATURE] = tmp[Utils::Csv::TEMPERATURE]
           array[array.size-1][Utils::Csv::WINDSPEED] = tmp[Utils::Csv::WINDSPEED]
         end
-        vals << [array[Utils::Csv::DATE], val]
+        vals << array[array.size-1][Utils::Csv::DATE].to_s + ',' + val.to_s
       else
         #p = Point::from_row(csv.row(i))
         #exi_p = Point.where(:date_record => p.date_record)
