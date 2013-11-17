@@ -1,19 +1,22 @@
 require 'rake'
 require 'json'
 require 'net/http'
+require 'rufus/scheduler'
+
 
 task :load_pulse_energy => :environment do
-  Point.delete_all
-
-  active = false
-  if active
-    if Point.all.size <10
-      loaddata(-32) #Load extra data the first time
+  scheduler = Rufus::Scheduler.new
+  scheduler.every '1m' do
+    active = true
+    if active
+      if Point.all.size <10
+        loaddata(-32) #Load extra data the first time
+      end
+      loaddata(-6)
     end
-    loaddata(-6)
+    Utils::Algorithm::fill_prediction
   end
-  Utils::Algorithm::fill_prediction
-
+  scheduler.join
 end
 
 def loaddata(hour)
