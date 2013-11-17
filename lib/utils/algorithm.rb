@@ -297,7 +297,7 @@ module Utils
             array[last][Utils::Csv::WINDSPEED] = tmp[Utils::Csv::WINDSPEED]
           end
           point = Point.where(:date_record => array[last][Utils::Csv::DATE]).first
-          point.consumption = val
+          point.consumption = val[:val]
           point.save
         end
       end
