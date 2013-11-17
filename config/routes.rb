@@ -10,7 +10,6 @@ Codejam2013dreamtim::Application.routes.draw do
   get 'predict', to: 'pages#machine'
   get 'bonus', to: 'pages#bonus'
   get 'pulse/:attr/:time', to: 'pages#pulse'
-  get 'graph', to: 'pages#graph'
   post 'csv', to: 'csv#upload'
   post 'predict', to: 'csv#upload'
   post 'bonus', to: 'csv#uploadbonus'

@@ -8,15 +8,11 @@ class PagesController < ApplicationController
     @time = round_to_15_minutes t
     @power = Point.find_by_date_record(@time)
 
-
-  end
-
-  def graph
     raw = Point.order(date_record: :desc).limit(100).all
     @min = raw.first[:consumption]
     @max = raw.first[:consumption]
 
-    @pred = Point.order(date_record: :asc).where(prediction: true).all.map{|m| [m[:date_record], m[:consumption]]}
+    @pred = Point.order(date_record: :asc).where(prediction: true).all.map { |m| [m[:date_record], m[:consumption]] }
 
     raw.each do |r|
       puts r[:consumption]
@@ -30,9 +26,9 @@ class PagesController < ApplicationController
         raw.delete(r)
       end
     end
-    @graph = raw.map{|m| [m[:date_record], m[:consumption]]}
-    @both = [{:name => 'Actual', :data => @graph},{:name => 'Predicted', :data => @pred}]
-    render :layout => false
+    @graph = raw.map { |m| [m[:date_record], m[:consumption]] }
+    @both = [{:name => 'Actual', :data => @graph}, {:name => 'Predicted', :data => @pred}]
+
   end
 
   def round_to_15_minutes(t)

@@ -16,11 +16,3 @@
 //= require bootstrap
 //= require chartkick
 //= require_tree .
-
-$(document).ready(function () {
-    updategraph();
-});
-
-updategraph = function () {
-    $( "#graphcontain" ).load( "/graph" );
-}

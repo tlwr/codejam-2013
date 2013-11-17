@@ -6,4 +6,5 @@
 
 <div id='graphcontain'>
   <meta http-equiv="refresh" content="60">
+  <%= line_chart @both, {:max => @max, :min => @min, :library => {:hAxis => {:title => 'Time'}, :vAxis => {:title => 'Consumption (kW)'}}} %>
 </div>
