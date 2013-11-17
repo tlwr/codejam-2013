@@ -3,7 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 require 'matrix'
 require 'csv'
-
+require 'rake'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -28,5 +28,6 @@ module Codejam2013dreamtim
     config.eager_load_paths += %W(
     #{config.root}/lib/utils
     )
+
   end
 end

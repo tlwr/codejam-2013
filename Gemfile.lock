@@ -177,6 +177,7 @@ DEPENDENCIES
   bootstrap-sass
   chartkick
   coffee-rails (~> 4.0.0)
+  daemons
   devise
   font-awesome-rails
   jbuilder (~> 1.2)

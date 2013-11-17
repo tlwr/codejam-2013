@@ -5,10 +5,17 @@ require 'rufus/scheduler'
 
 
 task :load_pulse_energy => :environment do
+
+end
+
+def run
+  p = Point.new
+  p.radiation = 10
+  p.save
   scheduler = Rufus::Scheduler.new
   scheduler.every '1m' do
     sleep(30)
-    active = true
+    active = false
     puts 'Update pulse energy...'
     if active
       if Point.all.size <10
