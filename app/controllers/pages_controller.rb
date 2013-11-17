@@ -1,4 +1,6 @@
-
+require 'time'
+require 'net/https'
+require 'uri'
 
 class PagesController < ApplicationController
   def index
@@ -6,6 +8,28 @@ class PagesController < ApplicationController
     @time = t-t.sec-t.min%15*60 + (15*60)
     @power = 20000
     @points = 128
+  end
+
+  def pulseapi(attr,time)
+    key = '60777831C1AA2C232B6D4E796B4C3650'
+    loc = 'https://api.pulseenergy.com/pulse/1/points/' + attr + '/data.json?key=' + key + '&interval=day&start=' + (time.iso8601)[0..-7]
+    puts loc
+    uri = URI.parse(loc)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+    request = Net::HTTP::Get.new(uri.request_uri)
+
+    response = http.request(request)
+    response.body
+  end
+
+  def pulse
+    attr = params[:attr]
+    time = params[:time]
+    time = DateTime.new(2011,11,11,00,00,000)
+    render :text => pulseapi(attr,time)
   end
 
   def empty
@@ -36,17 +60,10 @@ class PagesController < ApplicationController
         puts 'To big delta'
         delta_c += 1
       end
-
       rescue ExceptionForMatrix::ErrNotRegular => error
         puts '===================error '
       end
-
-
-
     end
-
     puts delta_c
-
-
   end
 end

@@ -17,5 +17,4 @@ module ApplicationHelper
       lowwatt = lowwatt[:ivalue]
     end
   end
-
 end
