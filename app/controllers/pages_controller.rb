@@ -12,9 +12,11 @@ class PagesController < ApplicationController
   end
 
   def graph
-    raw = Point.order(date_record: :asc).limit(100).all
+    raw = Point.order(date_record: :desc).limit(100).all
     @min = raw.first[:consumption]
     @max = raw.first[:consumption]
+
+    @pred = Point.order(date_record: :asc).where(prediction: true).all.map{|m| [m[:date_record], m[:consumption]]}
 
     raw.each do |r|
       puts r[:consumption]
@@ -24,8 +26,12 @@ class PagesController < ApplicationController
       if r[:consumption] < @min then
         @min = r[:consumption]
       end
+      if r[:prediction] then
+        raw.delete(r)
+      end
     end
     @graph = raw.map{|m| [m[:date_record], m[:consumption]]}
+    @both = [{:name => 'Actual', :data => @graph},{:name => 'Predicted', :data => @pred}]
     render :layout => false
   end
 
