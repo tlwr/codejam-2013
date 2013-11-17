@@ -121,7 +121,7 @@ module Utils
 
     #Forcast the next value in the csv using the given row_index
     def self.forcast_next_value(full_csv, row_index)
-      array = [-1, 5, 10, 20, 50,100, 500]
+      array = [-1, 5, 10, 20, 50, 100, 500]
       coefs = 0.0
       result = 0.0
       array.each do |nb|
@@ -141,7 +141,7 @@ module Utils
           coefs += 1/(Math::exp(coef))
           result += value/(Math.exp(coef))
         rescue ExceptionForMatrix::ErrNotRegular => exp
-          puts ' errpr not regular wtf '
+          puts ' expr not regular wtf '
         end
       end
       result/coefs
@@ -151,19 +151,38 @@ module Utils
     #Just basic for the moment loading the last value all the time
     def self.fill_missing_values(csv)
       array = csv.to_a
-      last_set_row = array[0]
-      array.each do |row|
+      last_set_row_index = nil
+      next_set_row_index = nil
+      array.each_with_index do |row, index|
+        if row[Csv::RADIATION] != 0.0
+          last_set_row_index = index
+          break
+        end
+      end
+      array.each_with_index do |row, index|
         if row[Csv::RADIATION]== 0.0
-          row[Csv::RADIATION] = last_set_row[Csv::RADIATION]
-          row[Csv::HUMIDITY] = last_set_row[Csv::HUMIDITY]
-          row[Csv::TEMPERATURE] = last_set_row[Csv::TEMPERATURE]
-          row[Csv::WINDSPEED] = last_set_row[Csv::WINDSPEED]
+          (index...array.size).each do |i|
+            next_row = csv.row(i)
+            if next_row[Csv::RADIATION] != 0.0
+              next_set_row_index = i
+              break
+            end
+          end
+          row[Csv::RADIATION] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::RADIATION], csv.row(next_set_row_index)[Csv::RADIATION], index)
+          row[Csv::HUMIDITY] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::HUMIDITY], csv.row(next_set_row_index)[Csv::HUMIDITY], index)
+          row[Csv::TEMPERATURE] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::TEMPERATURE], csv.row(next_set_row_index)[Csv::TEMPERATURE], index)
+          row[Csv::WINDSPEED] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::WINDSPEED], csv.row(next_set_row_index)[Csv::WINDSPEED], index)
         else
-          last_set_row = row
+          last_set_row_index = index
         end
       end
       Matrix.rows(array)
     end
+
+    def self.linear_aprx(x1, x2, y1, y2, x)
+      y1+(y2-y1)*(x-x1)/(x2-x1)
+    end
+
 
     def self.time_to_f(time)
       time.sec+time.min*60+time.hour*3600
