@@ -88,13 +88,6 @@ class PagesController < ApplicationController
     response.body
   end
 
-  def pulse
-    attr = params[:attr]
-    time = params[:time]
-    time = DateTime.new(2011, 11, 11, 00, 00, 000)
-    render :text => pulseapi(attr, time)
-  end
-
   def empty
     Point.delete_all
     acc = []
