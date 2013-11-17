@@ -21,3 +21,6 @@
 Gemfile.lock
 
 /config/database.yml
+/.openshift
+/.openshift/
+/.openshift/*
