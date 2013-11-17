@@ -8,11 +8,11 @@ class PagesController < ApplicationController
     @time = round_to_15_minutes t
     @power = Point.find_by_date_record(@time)
 
-    raw = Point.order(date_record: :desc).limit(100).all
+    raw = Point.order(date_record: :desc).limit(100).to_a
     @min = raw.first[:consumption]
     @max = raw.first[:consumption]
 
-    @pred = Point.order(date_record: :asc).where(prediction: true).all.map { |m| [m[:date_record], m[:consumption]] }
+    @pred = Point.order(date_record: :asc).where(prediction: true).to_a.map { |m| [m[:date_record], m[:consumption]] }
 
     raw.each do |r|
       puts r[:consumption]
