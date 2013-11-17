@@ -33,7 +33,7 @@ class CsvController < ApplicationController
       row = csv.row(i).to_a
       array << row
       if csv.row(i)[Utils::Csv::CONSUMPTION] == 0.0
-        tmp = nil
+          tmp = nil
         if array[array.size-1][Utils::Csv::RADIATION] != 0.0
           tmp = array[i].clone
           array[array.size-1][Utils::Csv::RADIATION] = 0.0

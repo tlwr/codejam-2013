@@ -103,8 +103,10 @@ class PagesController < ApplicationController
     #  end
     #end
 
+    puts 'fill values'
 
     (full_csv.row_size-5000...full_csv.row_size-96).each do |row|
+      puts 'filling: ' + row.to_s
       Point::from_row(full_csv.row(row)).save
     end
 
