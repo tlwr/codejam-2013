@@ -121,7 +121,7 @@ module Utils
 
     #Forcast the next value in the csv using the given row_index
     def self.forcast_next_value(full_csv, row_index)
-      array = [-1, 5, 20, 96, 999]
+      array = [-1, 5, 10, 20, 50,100, 500]
       coefs = 0.0
       result = 0.0
       array.each do |nb|
@@ -140,8 +140,8 @@ module Utils
             delta = compute_delta(csv, curve)
             coef = delta/nb
           end
-          coefs += 1/(coef**2)
-          result += value/(coef**2)
+          coefs += 1/(Math::exp(coef))
+          result += value/(Math.exp(coef))
         rescue ExceptionForMatrix::ErrNotRegular => exp
           puts ' errpr not regular wtf '
         end
