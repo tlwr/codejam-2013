@@ -3,8 +3,9 @@ require 'json'
 require 'net/http'
 
 task :load_pulse_energy => :environment do
-  #Point.delete_all
-  active = true
+  Point.delete_all
+
+  active = false
   if active
     if Point.all.size <10
       loaddata(-32) #Load extra data the first time
