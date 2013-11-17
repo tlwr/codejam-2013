@@ -7,7 +7,6 @@ class PagesController < ApplicationController
     t = DateTime.now
     @time = round_to_15_minutes t
     @power = Point.find_by_date_record(@time)
-
     raw = Point.order(date_record: :desc).limit(100).to_a
     @min = raw.first[:consumption]
     @max = raw.first[:consumption]

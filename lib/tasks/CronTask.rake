@@ -5,14 +5,12 @@ require 'rufus/scheduler'
 
 
 task :load_pulse_energy => :environment do
+  Point.delete_all
   run
 end
 
 def run
-  scheduler = Rufus::Scheduler.new
-  scheduler.every '1m' do
-    sleep(30)
-    active = false
+    active = true
     puts 'Update pulse energy...'
     if active
       if Point.all.size <10
@@ -21,8 +19,6 @@ def run
       loaddata(-6)
     end
     Utils::Algorithm::fill_prediction
-  end
-  scheduler.join
 end
 
 def loaddata(hour)

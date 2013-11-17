@@ -181,7 +181,12 @@ module Utils
       variance = compute_delta_sq(csv, curve)/csv.row_size
       z = Matrix.rows([[1], [row[Csv::RADIATION]], [row[Csv::HUMIDITY]], [row[Csv::TEMPERATURE]], [row[Csv::WINDSPEED]], [row[Csv::TIME]]])
 
-      d = Math.sqrt((variance * (z.transpose*(x.transpose*x).inverse*z)[0, 0])*val)
+      tmp = (variance * (z.transpose*(x.transpose*x).inverse*z)[0, 0])*val
+      if tmp <0
+        tmp = 100
+      end
+      puts 'sqrt: ' + ((variance * (z.transpose*(x.transpose*x).inverse*z)[0, 0])*val).to_s
+      d = Math.sqrt(tmp)
       [pred-d, pred+d]
     end
 
@@ -226,7 +231,11 @@ module Utils
 
 
     def self.time_to_f(time)
-      time.sec+time.min*60+time.hour*3600
+      time_nb = (time.sec+time.min*60+time.hour*3600)
+      if time_nb <= 13600
+        time_nb = 86400+time_nb
+      end
+      57000-(time_nb-57000).abs
     end
 
 

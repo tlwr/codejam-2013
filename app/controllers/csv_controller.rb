@@ -23,25 +23,22 @@ class CsvController < ApplicationController
     else
       matrix = Utils::Algorithm::csv_to_matrix(file.read)
 
-      render :text => get_missing_value(matrix).map { |x| "#{x[:date].to_s},#{x[:val].to_s},#{x[:in0].to_s},#{x[:in1].to_s}\n" }.join(''), :status => 200
+      render :text => get_missing_value(matrix).map { |x| "#{x[:date].to_s},#{x[:in0].to_s},#{x[:in1].to_s}\n" }.join(''), :status => 200
     end
   end
 
   def local
     file = File.open('sample_input.csv')
     matrix = (Utils::Algorithm::csv_to_matrix(file.read))
-    render :text => get_missing_value(matrix).join('<br/>'), :status => 200
+    render :text => get_missing_value(matrix).map { |x| x[:val] }.join('<br/>'), :status => 200
   end
 
 
   def get_missing_value(csv)
     #Remove all existing prediction
-    Point.where(:prediction => true).delete_all
     vals = []
     array = []
-    Point.order(date_record: :desc).limit(1000).each do |p|
-      #array.unshift(p.to_a)
-    end
+
     prev_interval = 1
     (0...csv.row_size).each do |i|
       row = csv.row(i).to_a
@@ -71,6 +68,7 @@ class CsvController < ApplicationController
         prev_interval = prev_interval * (1 -(val[:val]-val[:interval][0]).abs/val[:val])
         result_interval[0] = val[:val] - ((1-prev_interval) *val[:val])
         result_interval[1] = val[:val] + ((1-prev_interval) *val[:val])
+
 
 
         vals << {:date => array[last][Utils::Csv::DATE].to_s, :val => val[:val].to_s, :in0 => result_interval[0].to_s, :in1 => result_interval[1].to_s}
