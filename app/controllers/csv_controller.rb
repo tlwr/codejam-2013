@@ -10,7 +10,7 @@ class CsvController < ApplicationController
     else
       matrix = Utils::Algorithm::csv_to_matrix(file.read)
 
-      render :text => get_missing_value(matrix), :status => 200
+      render :text => get_missing_value(matrix).map { |x| x[:val].to_s+ '\n' }.join(''), :status => 200
     end
   end
 
@@ -23,7 +23,7 @@ class CsvController < ApplicationController
     else
       matrix = Utils::Algorithm::csv_to_matrix(file.read)
 
-      render :text => get_missing_value(matrix), :status => 200
+      render :text => get_missing_value(matrix).map { |x| x[:val].to_s+','+x[:in0].to_s+','+x[:in1].to_s + '\n' }.join(''), :status => 200
     end
   end
 
@@ -73,7 +73,7 @@ class CsvController < ApplicationController
         result_interval[1] = val[:val] + ((1-prev_interval) *val[:val])
 
 
-        vals << val[:val].to_s+','+result_interval[0].to_s+','+result_interval[1].to_s
+        vals << {val => val[:val].to_s, :in0 => result_interval[0].to_s, :in1 => result_interval[1].to_s}
       end
     end
     vals
