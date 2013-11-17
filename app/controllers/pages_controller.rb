@@ -9,26 +9,29 @@ class PagesController < ApplicationController
     @power = Point.find_by_date_record(@time)
 
     raw = Point.order(date_record: :desc).limit(100).to_a
-    @min = raw.first[:consumption]
-    @max = raw.first[:consumption]
+    if raw.nil? or raw.empty? then
+      render :text => 'We are currently grabbing data from pulse energy, please wait'
+    else
+      @min = raw.first[:consumption]
+      @max = raw.first[:consumption]
 
-    @pred = Point.order(date_record: :asc).where(prediction: true).to_a.map { |m| [m[:date_record], m[:consumption]] }
+      @pred = Point.order(date_record: :asc).where(prediction: true).to_a.map { |m| [m[:date_record], m[:consumption]] }
 
-    raw.each do |r|
-      puts r[:consumption]
-      if r[:consumption] > @max then
-        @max = r[:consumption]
+      raw.each do |r|
+        puts r[:consumption]
+        if r[:consumption] > @max then
+          @max = r[:consumption]
+        end
+        if r[:consumption] < @min then
+          @min = r[:consumption]
+        end
+        if r[:prediction] then
+          raw.delete(r)
+        end
       end
-      if r[:consumption] < @min then
-        @min = r[:consumption]
-      end
-      if r[:prediction] then
-        raw.delete(r)
-      end
+      @graph = raw.map { |m| [m[:date_record], m[:consumption]] }
+      @both = [{:name => 'Actual', :data => @graph}, {:name => 'Predicted', :data => @pred}]
     end
-    @graph = raw.map { |m| [m[:date_record], m[:consumption]] }
-    @both = [{:name => 'Actual', :data => @graph}, {:name => 'Predicted', :data => @pred}]
-
   end
 
   def round_to_15_minutes(t)
