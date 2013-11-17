@@ -42,7 +42,6 @@ gem 'bootstrap-sass'
 gem 'chartkick'
 gem 'font-awesome-rails'
 gem 'whenever'
-gem 'statsample'
 
 
 # Use ActiveModel has_secure_password
