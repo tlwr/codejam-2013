@@ -1,4 +1,5 @@
 require 'rufus/scheduler'
+require 'net/http'
 
 Thread.new do
   Pulse::run
@@ -10,7 +11,7 @@ class Pulse
   def self.run
     puts 'running backgriund pulse'
     scheduler = Rufus::Scheduler.new
-    scheduler.every '15m' do
+    scheduler.every '1m' do
       sleep(30)
       active = true
       puts 'Update pulse energy...'
