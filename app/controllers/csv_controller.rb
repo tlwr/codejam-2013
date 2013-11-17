@@ -34,7 +34,7 @@ class CsvController < ApplicationController
   end
 
 
-    def get_missing_value(csv)
+  def get_missing_value(csv)
     #Remove all existing prediction
     Point.where(:prediction => true).delete_all
     vals = []
@@ -42,6 +42,7 @@ class CsvController < ApplicationController
     Point.order(date_record: :desc).limit(1000).each do |p|
       #array.unshift(p.to_a)
     end
+    prev_interval = 1
     (0...csv.row_size).each do |i|
       row = csv.row(i).to_a
       array << row
@@ -66,7 +67,13 @@ class CsvController < ApplicationController
           array[last][Utils::Csv::TEMPERATURE] = tmp[Utils::Csv::TEMPERATURE]
           array[last][Utils::Csv::WINDSPEED] = tmp[Utils::Csv::WINDSPEED]
         end
-        vals << val[:val].to_s+','+val[:interval][0].to_s+','+val[:interval][1].to_s
+        result_interval= []
+        result_interval[0] = val[:interval][0] + prev_interval *(val[:val]-val[:interval][0])
+        result_interval[1] = val[:interval][1] + prev_interval *(val[:val]-val[:interval][1])
+        prev_interval = prev_interval * (1 -(val[:val]-val[:interval][0]).abs/val[:val])
+
+
+        vals << val[:val].to_s+','+result_interval[0].to_s+','+result_interval[0].to_s
       end
     end
     vals

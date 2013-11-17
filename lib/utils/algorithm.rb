@@ -95,12 +95,10 @@ module Utils
       result = 0.0
       coef = 0.0
       sim = get_all_similar_curves(csv)
-      puts 'Simi:  ' + sim.size.to_s
       sim.each do |curve, delta|
         coef += 1
         result += curve.value
       end
-      puts 'Coef: ' + coef.to_s
       result/coef
     end
 
@@ -182,8 +180,6 @@ module Utils
       variance =  compute_delta_sq(csv, curve)/csv.row_size
       z = Matrix.rows([[1], [row[Csv::RADIATION]], [row[Csv::HUMIDITY]], [row[Csv::TEMPERATURE]], [row[Csv::WINDSPEED]], [row[Csv::TIME]]])
 
-
-      puts 'va: ' + (variance).to_s
       d = Math.sqrt((variance * (z.transpose*(x.transpose*x).inverse*z)[0, 0])*val)
       [pred-d, pred+d]
     end
@@ -273,8 +269,6 @@ module Utils
 
         last = array.size-1
         if p.prediction
-          puts 'p: ' + p.to_a.to_s
-          puts ' *-----------------------------*'
           tmp = nil
           array[last][Utils::Csv::CONSUMPTION] = 0.0 #Remove the consumption
                                                      #Forget temporaly the data
@@ -286,9 +280,7 @@ module Utils
             array[last][Utils::Csv::WINDSPEED] = 0.0
           end
           val = Utils::Algorithm.forcast_next_value(Matrix.rows(array), last)
-          puts 'last: ' + array[last-1][Utils::Csv::CONSUMPTION].to_s
-          puts val.to_s + '  --- ' + array[last][Utils::Csv::TIME].to_s
-          array[last][Utils::Csv::CONSUMPTION] = val
+          array[last][Utils::Csv::CONSUMPTION] = val[:val]
                                                      #Replace the data
           unless tmp.nil?
             array[last][Utils::Csv::RADIATION] = tmp[Utils::Csv::RADIATION]
