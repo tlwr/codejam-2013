@@ -58,7 +58,7 @@ class CsvController < ApplicationController
           array[last][Utils::Csv::WINDSPEED] = 0.0
         end
         val = Utils::Algorithm.forcast_next_value(Matrix.rows(array), last)
-        array[last][Utils::Csv::CONSUMPTION] = val
+        array[last][Utils::Csv::CONSUMPTION] = val[:val]
         #Replace the data
         unless tmp.nil?
           array[last][Utils::Csv::RADIATION] = tmp[Utils::Csv::RADIATION]
@@ -66,7 +66,7 @@ class CsvController < ApplicationController
           array[last][Utils::Csv::TEMPERATURE] = tmp[Utils::Csv::TEMPERATURE]
           array[last][Utils::Csv::WINDSPEED] = tmp[Utils::Csv::WINDSPEED]
         end
-        vals << val[:val].to_s
+        vals << val[:val].to_s+','+val[:interval][0].to_s+','+val[:interval][1].to_s
       end
     end
     vals

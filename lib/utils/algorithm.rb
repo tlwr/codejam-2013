@@ -42,6 +42,14 @@ module Utils
       end
       delta
     end
+    def self.compute_delta_sq(csv, curve)
+      delta = 0
+      (0...csv.row_size).each do |i|
+        row = csv.row(i)
+        delta += ((row[Csv::CONSUMPTION] - compute_consumption(row, curve)).abs)**2
+      end
+      delta
+    end
 
     #Compute the consumption using the params value and the curve
     def self.compute_consumption(row, curve)
@@ -139,10 +147,10 @@ module Utils
             value = compute_consumption(full_csv.row(row_index), curve)
             delta = compute_delta(csv, curve)
             coef = delta/nb
-            #interval = interval(curve, value, ttable[i], nb-5, csv, full_csv.row(row_index))
-            #interval_result[0] += interval[0]/(Math.exp(coef))
-            #interval_result[1] += interval[1]/(Math.exp(coef))
-            #coef_interval += 1/(Math::exp(coef))
+            interval = interval(curve, value, ttable[i], nb-5, csv, full_csv.row(row_index))
+            interval_result[0] += interval[0]/(Math.exp(coef))
+            interval_result[1] += interval[1]/(Math.exp(coef))
+            coef_interval += 1/(Math::exp(coef))
           end
           coefs += 1/(Math::exp(coef))
           result += value/(Math.exp(coef))
@@ -152,8 +160,9 @@ module Utils
           puts ' expr not regular wtf '
         end
       end
-     # {val => result/coefs, :interval => interval_result/coef_interval}
-      result/coefs
+      interval_result[0]= interval_result[0]/coef_interval
+      interval_result[1]= interval_result[1]/coef_interval
+      {:val => result/coefs, :interval => interval_result}
     end
 
     def self.interval(curve, pred, val, np, csv, row)
@@ -167,15 +176,13 @@ module Utils
       end
       x = Matrix.columns(array)
 
-      puts b
+      #variance = ((y.transpose*y)-(b.transpose*x.transpose*y))[0, 0]/np
 
-      variance = ((y.transpose*y)-(b.transpose*(x.transpose*y)))[0, 0]/np
+
+      variance =  compute_delta_sq(csv, curve)/csv.row_size
       z = Matrix.rows([[1], [row[Csv::RADIATION]], [row[Csv::HUMIDITY]], [row[Csv::TEMPERATURE]], [row[Csv::WINDSPEED]], [row[Csv::TIME]]])
 
-      print_size('z', z)
-      print_size('x', x)
-      print_size('xTx', x.transpose*x)
-      print_size('xTy', (x.transpose*x).inverse*z)
+
       puts 'va: ' + (variance).to_s
       d = Math.sqrt((variance * (z.transpose*(x.transpose*x).inverse*z)[0, 0])*val)
       [pred-d, pred+d]
