@@ -10,7 +10,44 @@ class PagesController < ApplicationController
     @points = 128
   end
 
-  def pulseapi(attr,time)
+  def set
+    high = params[:settings_high]
+    low = params[:settings_low]
+    highwatt = Settings.find_by_name('highwatt')
+    lowwatt = Settings.find_by_name('lowwatt')
+    if highwatt.nil?
+      highwatt = Settings.new
+      highwatt.name = 'highwatt'
+    end
+    if lowwatt.nil?
+      lowwatt = Settings.new
+      lowwatt.name = 'lowwatt'
+    end
+    unless high.nil?
+      highwatt.ivalue = high
+    else
+      highwatt.ivalue = 20000
+    end
+    unless low.nil?
+      lowwatt.ivalue = low
+    else
+      lowwatt.ivalue = 5000
+    end
+    if lowwatt.ivalue > highwatt.ivalue then
+      lowwatt.ivalue = 0
+    end
+    if lowwatt.ivalue < 0 then
+      lowwatt.ivalue = 0
+    end
+    if highwatt.ivalue < 0 then
+      highwatt.ivalue = 0
+    end
+    highwatt.save
+    lowwatt.save
+    redirect_to settings_path
+  end
+
+  def pulseapi(attr, time)
     key = '60777831C1AA2C232B6D4E796B4C3650'
     loc = 'https://api.pulseenergy.com/pulse/1/points/' + attr + '/data.json?key=' + key + '&interval=day&start=' + (time.iso8601)[0..-7]
     puts loc
@@ -28,8 +65,8 @@ class PagesController < ApplicationController
   def pulse
     attr = params[:attr]
     time = params[:time]
-    time = DateTime.new(2011,11,11,00,00,000)
-    render :text => pulseapi(attr,time)
+    time = DateTime.new(2011, 11, 11, 00, 00, 000)
+    render :text => pulseapi(attr, time)
   end
 
   def empty

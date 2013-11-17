@@ -3,12 +3,14 @@ Codejam2013dreamtim::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
   root 'pages#index'
+  get 'settings', to: 'pages#settings'
   get 'learn',to: 'pages#empty'
   get 'csvl', to: 'csv#local'
   get 'csv', to: 'pages#machine'
   get 'pulse/:attr/:time', to: 'pages#pulse'
   post 'wattsettings', to: 'settings#watts'
   post 'csv', to: 'csv#upload'
+  post 'settings', to: 'pages#set'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

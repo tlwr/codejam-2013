@@ -1,0 +1,13 @@
+<h1>settings</h1>
+<p>These settings will display warnings if the next predicted value falls outside the set range.</p>
+<%= form_tag do %>
+  <div class='form-group'>
+    <label>High:</label>
+    <input type='number' name='settings_high' value='<%= highwatt %>'>
+  </div>
+  <div class='form-group'>
+    <label>Low:</label>
+    <input type='number' name='settings_low' value='<%= lowwatt %>'>
+  </div>
+  <%= submit_tag('Update', :class => 'btn btn-info') %>
+<% end %>
