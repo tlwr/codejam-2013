@@ -15,13 +15,7 @@
       <ul class='nav nav-pills pull-right'>
         <li><a href='<%= root_path %>'>home</a></li>
         <li><a href="<%= csv_path %>">machine</a></li>
-        <li class="dropdown-submenu">
-          <a href="#">settings</a>
-          <ul class="dropdown-menu">
-            <li><a><label>High:</label><input id='settings_high' value='<%= highwatt %>' type='number'></a></li>
-            <li><a><label>Low:</label><input id='settings_low' value='<%= lowwatt %>' type='number'></a></li>
-          </ul>
-        </li>
+        <li><a href="<%= settings_path %>">settings</a></li>
         <% if current_user %>
           <li><%= link_to 'log out', destroy_user_session_path, :method => :delete %></li>
         <% else %>
