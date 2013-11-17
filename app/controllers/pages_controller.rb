@@ -13,8 +13,6 @@ class PagesController < ApplicationController
     @max = raw.first[:consumption]
 
     @pred = Point.order(date_record: :asc).where(prediction: true).all.map { |m| [m[:date_record], m[:consumption]] }
-    @predmin = Point.order(date_record: :asc).where(prediction: true).all.map { |m| [m[:date_record], m[:min_consumption]] }
-    @predmax = Point.order(date_record: :asc).where(prediction: true).all.map { |m| [m[:date_record], m[:max_consumption]] }
 
     raw.each do |r|
       puts r[:consumption]
@@ -29,7 +27,7 @@ class PagesController < ApplicationController
       end
     end
     @graph = raw.map { |m| [m[:date_record], m[:consumption]] }
-    @both = [{:name => 'Actual', :data => @graph}, {:name => 'Predicted', :data => @pred},{:name => 'Predicted Upper Conf', :data => @predmax},{:name =>'Predicted Lower Conf', :data => @predmin}]
+    @both = [{:name => 'Actual', :data => @graph}, {:name => 'Predicted', :data => @pred}]
 
   end
 
