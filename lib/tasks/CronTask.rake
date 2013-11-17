@@ -6,8 +6,9 @@ require 'rufus/scheduler'
 
 task :load_pulse_energy => :environment do
   scheduler = Rufus::Scheduler.new
-  scheduler.every '1m' do
+  scheduler.every '15m' do
     active = true
+    puts 'Update pulse energy...'
     if active
       if Point.all.size <10
         loaddata(-32) #Load extra data the first time
