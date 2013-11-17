@@ -7,9 +7,11 @@ Codejam2013dreamtim::Application.routes.draw do
   get 'learn',to: 'pages#empty'
   get 'csvl', to: 'csv#local'
   get 'csv', to: 'pages#machine'
+  get 'predict', to: 'pages#machine'
   get 'bonus', to: 'pages#bonus'
   get 'pulse/:attr/:time', to: 'pages#pulse'
   post 'csv', to: 'csv#upload'
+  post 'predict', to: 'csv#upload'
   post 'bonus', to: 'csv#uploadlocal'
   post 'settings', to: 'pages#set'
 
