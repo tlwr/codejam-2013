@@ -126,12 +126,10 @@ module Utils
       result = 0.0
       array.each do |nb|
         begin
-
           value = 0.0
           coef = 0.0
           if nb == -1
             value = general_curve(full_csv.row(row_index))
-            puts 'GENE: ' + value.to_s
             coef = 1678
           else
             csv = get_last_rows(full_csv, row_index, nb)
@@ -152,10 +150,10 @@ module Utils
     #TODO spline
     #Just basic for the moment loading the last value all the time
     def self.fill_missing_values(csv)
-      last_set_row = nil
       array = csv.to_a
+      last_set_row = array[0]
       array.each do |row|
-        if row[Csv::RADIATION].nil? or row[Csv::RADIATION]== 0.0
+        if row[Csv::RADIATION]== 0.0
           row[Csv::RADIATION] = last_set_row[Csv::RADIATION]
           row[Csv::HUMIDITY] = last_set_row[Csv::HUMIDITY]
           row[Csv::TEMPERATURE] = last_set_row[Csv::TEMPERATURE]
