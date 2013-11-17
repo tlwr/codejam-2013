@@ -42,6 +42,7 @@ module Utils
       end
       delta
     end
+
     def self.compute_delta_sq(csv, curve)
       delta = 0
       (0...csv.row_size).each do |i|
@@ -177,7 +178,7 @@ module Utils
       #variance = ((y.transpose*y)-(b.transpose*x.transpose*y))[0, 0]/np
 
 
-      variance =  compute_delta_sq(csv, curve)/csv.row_size
+      variance = compute_delta_sq(csv, curve)/csv.row_size
       z = Matrix.rows([[1], [row[Csv::RADIATION]], [row[Csv::HUMIDITY]], [row[Csv::TEMPERATURE]], [row[Csv::WINDSPEED]], [row[Csv::TIME]]])
 
       d = Math.sqrt((variance * (z.transpose*(x.transpose*x).inverse*z)[0, 0])*val)
@@ -290,6 +291,8 @@ module Utils
           end
           point = Point.where(:date_record => array[last][Utils::Csv::DATE]).first
           point.consumption = val[:val]
+          point.min_consumption = val[:interval][0]
+          point.max_consumption = val[:interval][1]
           point.save
         end
       end

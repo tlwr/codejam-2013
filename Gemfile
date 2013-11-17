@@ -43,6 +43,7 @@ gem 'chartkick'
 gem 'font-awesome-rails'
 gem 'whenever'
 gem 'rufus-scheduler'
+gem 'daemons'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
