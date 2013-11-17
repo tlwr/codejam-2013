@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131116231201) do
+ActiveRecord::Schema.define(version: 20131116220951) do
 
   create_table "curves", force: true do |t|
     t.float    "value"
@@ -27,16 +27,15 @@ ActiveRecord::Schema.define(version: 20131116231201) do
   end
 
   create_table "points", force: true do |t|
-    t.datetime "date_record"
+    t.date     "date"
     t.float    "radiation"
     t.float    "humidity"
     t.float    "temperature"
     t.float    "windspeed"
-    t.float    "time"
+    t.time     "time"
     t.float    "consumption"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "prediction"
   end
 
   create_table "rails_admin_histories", force: true do |t|

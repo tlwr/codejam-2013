@@ -11,11 +11,6 @@ module Utils
         array.append(x.column(index))
       end
       x = Matrix.columns(array)
-=begin
-      puts 'x: ' + (x.transpose*x).row_size.to_s + ' ' + (x.transpose*x).column_size.to_s
-      puts (x.transpose*x)
-      puts '------------'
-=end
       ((x.transpose*x).inverse)*(x.transpose*y)
     end
 
@@ -121,7 +116,7 @@ module Utils
 
     #Forcast the next value in the csv using the given row_index
     def self.forcast_next_value(full_csv, row_index)
-      array = [-1, 5, 10, 20, 50, 100, 500]
+      array = [-1, 5, 10, 20, 50,90]
       coefs = 0.0
       result = 0.0
       array.each do |nb|
