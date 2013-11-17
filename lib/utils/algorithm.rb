@@ -116,13 +116,20 @@ module Utils
 
     #Forcast the next value in the csv using the given row_index
     def self.forcast_next_value(full_csv, row_index)
-      array = [-1, 5, 10, 20, 50,90]
+      array = [-1, 7, 11, 21, 31, 51, 96]
+      ttable = [1.645, 6.314, 2.015, 1.753, 1.708, 1.684, 1.662]
       coefs = 0.0
       result = 0.0
-      array.each do |nb|
+      interval_result = [0, 0]
+      coef_interval = 0
+      array.each_with_index do |nb, i|
+        if nb >= full_csv.row_size
+          next
+        end
         begin
           value = 0.0
           coef = 0.0
+
           if nb == -1
             value = general_curve(full_csv.row(row_index))
             coef = 1678
@@ -132,17 +139,52 @@ module Utils
             value = compute_consumption(full_csv.row(row_index), curve)
             delta = compute_delta(csv, curve)
             coef = delta/nb
+            #interval = interval(curve, value, ttable[i], nb-5, csv, full_csv.row(row_index))
+            #interval_result[0] += interval[0]/(Math.exp(coef))
+            #interval_result[1] += interval[1]/(Math.exp(coef))
+            #coef_interval += 1/(Math::exp(coef))
           end
           coefs += 1/(Math::exp(coef))
           result += value/(Math.exp(coef))
+
+
         rescue ExceptionForMatrix::ErrNotRegular => exp
           puts ' expr not regular wtf '
         end
       end
+     # {val => result/coefs, :interval => interval_result/coef_interval}
       result/coefs
     end
 
-    #TODO spline
+    def self.interval(curve, pred, val, np, csv, row)
+      b = Matrix.rows([[curve.coef_offset], [curve.coef_radiation], [curve.coef_humidity], [curve.coef_temperature], [curve.coef_wind], [curve.coef_time]])
+      x = get_matrix_from_column(csv, [Csv::RADIATION, Csv::HUMIDITY, Csv::TEMPERATURE, Csv::WINDSPEED, Csv::TIME])
+      y = get_matrix_from_column(csv, [Csv::CONSUMPTION])
+
+      array = [Array.new(x.row_size, 1)]
+      (0...x.column_size).each do |index|
+        array.append(x.column(index))
+      end
+      x = Matrix.columns(array)
+
+      puts b
+
+      variance = ((y.transpose*y)-(b.transpose*(x.transpose*y)))[0, 0]/np
+      z = Matrix.rows([[1], [row[Csv::RADIATION]], [row[Csv::HUMIDITY]], [row[Csv::TEMPERATURE]], [row[Csv::WINDSPEED]], [row[Csv::TIME]]])
+
+      print_size('z', z)
+      print_size('x', x)
+      print_size('xTx', x.transpose*x)
+      print_size('xTy', (x.transpose*x).inverse*z)
+      puts 'va: ' + (variance).to_s
+      d = Math.sqrt((variance * (z.transpose*(x.transpose*x).inverse*z)[0, 0])*val)
+      [pred-d, pred+d]
+    end
+
+    def self.print_size(e, a)
+      puts e + ': ' + a.row_size.to_s + ' - ' + a.column_size.to_s
+    end
+
     #Just basic for the moment loading the last value all the time
     def self.fill_missing_values(csv)
       array = csv.to_a
@@ -214,6 +256,45 @@ module Utils
       array = csv.to_a
       array[x][y]= val
       Matrix.rows(array)
+    end
+
+    def self.fill_prediction
+      points = Point.order(date_record: :desc).limit(1000).reverse
+      array = []
+      points.each do |p|
+        array << p.to_a
+
+        last = array.size-1
+        if p.prediction
+          puts 'p: ' + p.to_a.to_s
+          puts ' *-----------------------------*'
+          tmp = nil
+          array[last][Utils::Csv::CONSUMPTION] = 0.0 #Remove the consumption
+                                                     #Forget temporaly the data
+          if array[last][Utils::Csv::RADIATION] != 0.0
+            tmp = array[last].clone
+            array[last][Utils::Csv::RADIATION] = 0.0
+            array[last][Utils::Csv::HUMIDITY] = 0.0
+            array[last][Utils::Csv::TEMPERATURE] = 0.0
+            array[last][Utils::Csv::WINDSPEED] = 0.0
+          end
+          val = Utils::Algorithm.forcast_next_value(Matrix.rows(array), last)
+          puts 'last: ' + array[last-1][Utils::Csv::CONSUMPTION].to_s
+          puts val.to_s + '  --- ' + array[last][Utils::Csv::TIME].to_s
+          array[last][Utils::Csv::CONSUMPTION] = val
+                                                     #Replace the data
+          unless tmp.nil?
+            array[last][Utils::Csv::RADIATION] = tmp[Utils::Csv::RADIATION]
+            array[last][Utils::Csv::HUMIDITY] = tmp[Utils::Csv::HUMIDITY]
+            array[last][Utils::Csv::TEMPERATURE] = tmp[Utils::Csv::TEMPERATURE]
+            array[last][Utils::Csv::WINDSPEED] = tmp[Utils::Csv::WINDSPEED]
+          end
+          point = Point.where(:date_record => array[last][Utils::Csv::DATE]).first
+          point.consumption = val
+          point.save
+        end
+      end
+
     end
   end
 

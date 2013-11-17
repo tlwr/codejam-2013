@@ -9,7 +9,6 @@ Codejam2013dreamtim::Application.routes.draw do
   get 'csv', to: 'pages#machine'
   get 'bonus', to: 'pages#bonus'
   get 'pulse/:attr/:time', to: 'pages#pulse'
-  post 'wattsettings', to: 'settings#watts'
   post 'csv', to: 'csv#upload'
   post 'bonus', to: 'csv#uploadlocal'
   post 'settings', to: 'pages#set'

@@ -72,6 +72,7 @@ class PagesController < ApplicationController
   def empty
     Point.delete_all
     acc = []
+    times = []
     CSV.foreach('data_set.csv') do |row|
       m = []
       next if row[0] == 'Date'
@@ -81,6 +82,7 @@ class PagesController < ApplicationController
       m[Utils::Csv::TEMPERATURE] = row[3].to_f
       m[Utils::Csv::WINDSPEED] = row[4].to_f
       m[Utils::Csv::TIME] = Utils::Algorithm::time_to_f(Time.parse(row[0]))
+      times << m[Utils::Csv::TIME]
       m[Utils::Csv::CONSUMPTION] = row[5].to_f
       acc << m
     end
@@ -104,11 +106,11 @@ class PagesController < ApplicationController
     #end
 
     puts 'fill values'
-
     (full_csv.row_size-1000...full_csv.row_size-96).each do |row|
-      puts 'filling: ' + row.to_s
-      Point::from_row(full_csv.row(row)).save
+      #Point::from_row(full_csv.row(row)).save
     end
+
+    render :text => times.join('<br>')
 
   end
 end

@@ -1,11 +1,23 @@
 require 'rake'
 require 'json'
+require 'net/http'
 
 task :load_pulse_energy => :environment do
-  Point.destroy_all
+  #Point.delete_all
+  active = true
+  if active
+    if Point.all.size <10
+      loaddata(-32) #Load extra data the first time
+    end
+    loaddata(-6)
+  end
+  Utils::Algorithm::fill_prediction
 
+end
+
+def loaddata(hour)
   dt = DateTime.now
-  dt = dt.advance(:hours => -25, :minutes => -30)
+  dt = dt.advance(:hours => hour, :minutes => 0)
 
   power = JSON.parse(pulseapi(50578, dt))
   radiation = JSON.parse(pulseapi(66094, dt))
@@ -13,20 +25,25 @@ task :load_pulse_energy => :environment do
   temperature = JSON.parse(pulseapi(66077, dt))
   windspeed = JSON.parse(pulseapi(66096, dt))
   powero = []
+  puts 'GOT DATA FROM PULSE'
+  puts power['data'].size
   power['data'].each do |row|
-    unless row[1].nil?
-      powerv = Point.new
-      powerv.date_record = DateTime.parse(row[0])
-      powerv.time = Time.parse(row[0])
-      powerv.consumption = row[1]
-      powero.append powerv
+    powerv = Point.new
+    powerv.date_record = DateTime.parse(row[0])
+    powerv.time = Utils::Algorithm::time_to_f(Time.parse(row[0]))
+    powerv.consumption = row[1].to_f
+    if row[1].nil?
+      powerv.prediction=true
+    else
+      powerv.prediction=false
     end
+    powero.append powerv
   end
 
   radiation['data'].each do |row|
     powero.each do |po|
       if po.date_record == DateTime.parse(row[0]) then
-        po.radiation = row[1]
+        po.radiation = row[1].to_f
       end
     end
   end
@@ -34,7 +51,7 @@ task :load_pulse_energy => :environment do
   humidity['data'].each do |row|
     powero.each do |po|
       if po.date_record == DateTime.parse(row[0]) then
-        po.humidity = row[1]
+        po.humidity = row[1].to_f
       end
     end
   end
@@ -42,7 +59,7 @@ task :load_pulse_energy => :environment do
   temperature['data'].each do |row|
     powero.each do |po|
       if po.date_record == DateTime.parse(row[0]) then
-        po.temperature = row[1]
+        po.temperature = row[1].to_f
       end
     end
   end
@@ -50,15 +67,14 @@ task :load_pulse_energy => :environment do
   windspeed['data'].each do |row|
     powero.each do |po|
       if po.date_record == DateTime.parse(row[0]) then
-        po.windspeed = row[1]
+        po.windspeed = row[1].to_f
       end
     end
   end
 
   powero.each do |po|
-    po.save
+    po.save_if
   end
-
 end
 
 def pulseapi(attr, time)

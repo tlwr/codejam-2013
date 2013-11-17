@@ -24,6 +24,7 @@ class CsvController < ApplicationController
       matrix = Utils::Algorithm::csv_to_matrix(file.read)
 
       render :text => get_missing_value(matrix), :status => 200
+    end
   end
 
   def local
@@ -33,46 +34,39 @@ class CsvController < ApplicationController
   end
 
 
-  def get_missing_value(csv)
+    def get_missing_value(csv)
     #Remove all existing prediction
     Point.where(:prediction => true).delete_all
     vals = []
     array = []
     Point.order(date_record: :desc).limit(1000).each do |p|
-      array.unshift(p.to_a)
+      #array.unshift(p.to_a)
     end
     (0...csv.row_size).each do |i|
       row = csv.row(i).to_a
       array << row
+      last = array.size-1
+
       if csv.row(i)[Utils::Csv::CONSUMPTION] == 0.0
-          tmp = nil
-        if array[array.size-1][Utils::Csv::RADIATION] != 0.0
-          tmp = array[i].clone
-          array[array.size-1][Utils::Csv::RADIATION] = 0.0
-          array[array.size-1][Utils::Csv::HUMIDITY] = 0.0
-          array[array.size-1][Utils::Csv::TEMPERATURE] = 0.0
-          array[array.size-1][Utils::Csv::WINDSPEED] = 0.0
+        tmp = nil
+        #Forget temporaly the data
+        if array[last][Utils::Csv::RADIATION] != 0.0
+          tmp = array[last].clone
+          array[last][Utils::Csv::RADIATION] = 0.0
+          array[last][Utils::Csv::HUMIDITY] = 0.0
+          array[last][Utils::Csv::TEMPERATURE] = 0.0
+          array[last][Utils::Csv::WINDSPEED] = 0.0
         end
-        val = Utils::Algorithm.forcast_next_value(Matrix.rows(array), array.size-1)
-        puts 'last: ' + array[array.size-2][Utils::Csv::CONSUMPTION].to_s
-        puts val
-        array[array.size-1][Utils::Csv::CONSUMPTION] = val
+        val = Utils::Algorithm.forcast_next_value(Matrix.rows(array), last)
+        array[last][Utils::Csv::CONSUMPTION] = val
+        #Replace the data
         unless tmp.nil?
-          array[array.size-1][Utils::Csv::RADIATION] = tmp[Utils::Csv::RADIATION]
-          array[array.size-1][Utils::Csv::HUMIDITY] = tmp[Utils::Csv::HUMIDITY]
-          array[array.size-1][Utils::Csv::TEMPERATURE] = tmp[Utils::Csv::TEMPERATURE]
-          array[array.size-1][Utils::Csv::WINDSPEED] = tmp[Utils::Csv::WINDSPEED]
+          array[last][Utils::Csv::RADIATION] = tmp[Utils::Csv::RADIATION]
+          array[last][Utils::Csv::HUMIDITY] = tmp[Utils::Csv::HUMIDITY]
+          array[last][Utils::Csv::TEMPERATURE] = tmp[Utils::Csv::TEMPERATURE]
+          array[last][Utils::Csv::WINDSPEED] = tmp[Utils::Csv::WINDSPEED]
         end
-        vals << array[array.size-1][Utils::Csv::DATE].to_s + ',' + val.to_s
-      else
-        #p = Point::from_row(csv.row(i))
-        #exi_p = Point.where(:date_record => p.date_record)
-        #if exi_p.first.nil?
-        #  p.save
-        #elsif exi_p.first.prediction
-        # exi_p.value = p.value
-        # exi_p.save
-        #end
+        vals << val[:val].to_s
       end
     end
     vals

@@ -26,7 +26,7 @@ module Codejam2013dreamtim
     # config.i18n.default_locale = :de
     config.autoload_paths << 'lib' if Rails.env.development?
     config.eager_load_paths += %W(
-        #{config.root}/lib/utils
+    #{config.root}/lib/utils
     )
   end
 end

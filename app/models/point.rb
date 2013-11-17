@@ -2,6 +2,15 @@ class Point < ActiveRecord::Base
 
   validates_uniqueness_of :date_record
 
+  before_save :default_values
+  def default_values
+    self.radiation ||= 0.0
+    self.humidity ||= 0.0
+    self.windspeed ||= 0.0
+    self.temperature ||= 0.0
+    self.consumption ||= 0.0
+  end
+
   def self.from_row(row)
     p = Point.new
     p.date_record=row[Utils::Csv::DATE]
@@ -24,5 +33,16 @@ class Point < ActiveRecord::Base
     array[Utils::Csv::WINDSPEED] = windspeed
     array[Utils::Csv::CONSUMPTION]=consumption
     array
+  end
+
+  def save_if
+    exi_p = Point.where(:date_record => date_record)
+    if exi_p.first.nil?
+      save
+    elsif exi_p.first.prediction
+      exi_p.first.consumption = consumption
+      exi_p.first.prediction = prediction
+      exi_p.first.save
+    end
   end
 end
