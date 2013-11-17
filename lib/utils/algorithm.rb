@@ -214,10 +214,10 @@ module Utils
               break
             end
           end
-          #row[Csv::RADIATION] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::RADIATION], csv.row(next_set_row_index)[Csv::RADIATION], index)
-          #row[Csv::HUMIDITY] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::HUMIDITY], csv.row(next_set_row_index)[Csv::HUMIDITY], index)
+          row[Csv::RADIATION] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::RADIATION], csv.row(next_set_row_index)[Csv::RADIATION], index)
+          row[Csv::HUMIDITY] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::HUMIDITY], csv.row(next_set_row_index)[Csv::HUMIDITY], index)
           row[Csv::TEMPERATURE] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::TEMPERATURE], csv.row(next_set_row_index)[Csv::TEMPERATURE], index)
-          #row[Csv::WINDSPEED] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::WINDSPEED], csv.row(next_set_row_index)[Csv::WINDSPEED], index)
+          row[Csv::WINDSPEED] = linear_aprx(last_set_row_index, next_set_row_index, csv.row(last_set_row_index)[Csv::WINDSPEED], csv.row(next_set_row_index)[Csv::WINDSPEED], index)
         else
           last_set_row_index = index
         end

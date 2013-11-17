@@ -9,18 +9,21 @@ end
 class Pulse
 
   def self.run
-    puts 'running backgriund pulse'
+    logger.info  'running backgriund pulse'
     scheduler = Rufus::Scheduler.new
     scheduler.every '5m' do
-      active = true
-      puts 'Update pulse energy...'
+      active =
+          true
+      logger.info 'Update pulse energy...'
       if active
         if Point.all.size <10
           loaddata(-32) #Load extra data the first time
         end
         loaddata(-6)
       end
+      logger.info 'Calulating new'
       Utils::Algorithm::fill_prediction
+      logger.info 'End calculating'
     end
     scheduler.join
   end
