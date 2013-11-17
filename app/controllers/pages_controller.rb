@@ -4,10 +4,29 @@ require 'uri'
 
 class PagesController < ApplicationController
   def index
-    t = Time.new
-    @time = t-t.sec-t.min%15*60 + (15*60)
-    @power = 20000
-    @points = 128
+    t = DateTime.now
+    @time = round_to_15_minutes t
+    @power = []
+
+    raw = Point.order(date_record: :asc).limit(100).all
+    @min = raw.first[:consumption]
+    @max = raw.first[:consumption]
+
+    raw.each do |r|
+      puts r[:consumption]
+      if r[:consumption] > @max then
+        @max = r[:consumption]
+      end
+      if r[:consumption] < @min then
+        @min = r[:consumption]
+      end
+    end
+    @graph = raw.map{|m| [m[:date_record], m[:consumption]]}
+  end
+
+  def round_to_15_minutes(t)
+    rounded = Time.at((t.to_time.to_i / 900.0).round * 900)
+    t.is_a?(DateTime) ? rounded.to_datetime : rounded
   end
 
   def set

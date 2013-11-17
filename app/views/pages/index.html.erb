@@ -5,5 +5,5 @@
 </div>
 
 <div id='graphcontain'>
-  <%= area_chart(((1..100000).to_a.sample @points).zip(1..@points),{})%>
+  <%= area_chart @graph, :max => @max, :min => @min %>
 </div>
