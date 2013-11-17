@@ -56,4 +56,4 @@ gem 'chartkick'
 # gem 'debugger', group: [:development, :test]
 
 # This needs to be installed so we can run Rails console on OpenShift directly
-gem 'minitest'
+#gem 'minitest'
