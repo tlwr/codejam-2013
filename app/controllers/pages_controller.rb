@@ -67,7 +67,7 @@ class PagesController < ApplicationController
     #end
 
 
-    (0...full_csv.row_size-80).each do |row|
+    (full_csv.row_size-5000...full_csv.row_size-96).each do |row|
       Point::from_row(full_csv.row(row)).save
     end
 

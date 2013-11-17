@@ -3,7 +3,6 @@ Codejam2013dreamtim::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
   root 'pages#index'
-  get 'settings', to: 'pages#settings'
   get 'learn',to: 'pages#empty'
   get 'csvl', to: 'csv#local'
   get 'csv', to: 'pages#machine'
