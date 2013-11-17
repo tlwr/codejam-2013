@@ -123,7 +123,7 @@ module Utils
     #Forcast the next value in the csv using the given row_index
     def self.forcast_next_value(full_csv, row_index)
       array = [-1, 7, 11, 21, 31, 51, 96]
-      ttable = [1.645, 6.314, 2.015, 1.753, 1.708, 1.684, 1.662]
+      ttable = [1.645, 1, 0.727, 0.691, 0.684, 0.680, 0.677]
       coefs = 0.0
       result = 0.0
       interval_result = [0, 0]
