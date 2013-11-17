@@ -13,10 +13,10 @@
   <div class='container'>
     <div class='header'>
       <ul class='nav nav-pills pull-right'>
-        <li><a href='<%= root_path %>'><i class="icon-home"></i> home</a></li>
-        <li><a href="<%= csv_path %>"><i class="icon-exchange"></i> machine</a></li>
-        <li><a href="<%= bonus_path %>"><i class="icon-tasks"></i> bonus</a></li>
-        <li><a href="<%= settings_path %>"><i class="icon-gear"></i> settings</a></li>
+        <li><a href='<%= root_path %>'>home</a></li>
+        <li><a href="<%= csv_path %>">machine</a></li>
+        <li><a href="<%= bonus_path %>">bonus</a></li>
+        <li><a href="<%= settings_path %>">settings</a></li>
         <% if current_user %>
           <li><%= link_to 'log out', destroy_user_session_path, :method => :delete %></li>
         <% else %>
