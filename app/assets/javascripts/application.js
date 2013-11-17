@@ -16,3 +16,17 @@
 //= require bootstrap
 //= require chartkick
 //= require_tree .
+
+$(document).ready(function () {
+    updategraph();
+    window.setInterval(function () {
+        updategraph();
+    }, 60000);
+});
+
+updategraph = function () {
+    $.get("/graph", function (data) {
+        $("#graphcontain").html(data);
+        console.log('updated');
+    });
+}

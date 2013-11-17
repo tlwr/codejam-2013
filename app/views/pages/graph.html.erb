@@ -1,0 +1,2 @@
+<%= javascript_include_tag 'http://www.google.com/jsapi', 'chartkick' %>
+<%= area_chart @graph, {:max => @max, :min => @min, :library => {:hAxis => {:title => 'Time'}, :vAxis => {:title => 'Consumption (kW)'}}} %>

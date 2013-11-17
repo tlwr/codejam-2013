@@ -8,6 +8,10 @@ class PagesController < ApplicationController
     @time = round_to_15_minutes t
     @power = Point.find_by_date_record(@time)
 
+
+  end
+
+  def graph
     raw = Point.order(date_record: :asc).limit(100).all
     @min = raw.first[:consumption]
     @max = raw.first[:consumption]
@@ -22,6 +26,7 @@ class PagesController < ApplicationController
       end
     end
     @graph = raw.map{|m| [m[:date_record], m[:consumption]]}
+    render :layout => false
   end
 
   def round_to_15_minutes(t)
