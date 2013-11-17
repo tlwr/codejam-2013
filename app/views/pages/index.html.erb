@@ -1,10 +1,25 @@
 <div class='text-center'>
   <h1>power usage</h1>
+
   <p>predicted <strong><%= @power[:consumption] unless @power.nil? %></strong>kW at <%= @time.strftime('%H:%M') %></p>
-  <hr>
 </div>
+
+<hr>
 
 <div id='graphcontain'>
   <meta http-equiv="refresh" content="60">
   <%= line_chart @both, {:max => @max, :min => @min, :library => {:hAxis => {:title => 'Time'}, :vAxis => {:title => 'Consumption (kW)'}}} %>
 </div>
+
+<% if @power[:consumption] > highwatt %>
+  <hr>
+  <div class='text-center'>
+    <h3>warning: high power</h3>
+  </div>
+<% elsif @power[:consumption < lowwatt] %>
+  <hr>
+  <div class='text-center'>
+    <h3>warning: low power</h3>
+  </div>
+<% end %>
+
