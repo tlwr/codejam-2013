@@ -3,6 +3,7 @@ class Point < ActiveRecord::Base
   validates_uniqueness_of :date_record
 
   before_save :default_values
+
   def default_values
     self.radiation ||= 0.0
     self.humidity ||= 0.0
@@ -40,7 +41,7 @@ class Point < ActiveRecord::Base
     if exi_p.first.nil?
       save
     elsif exi_p.first.prediction
-      exi_p.first.consumption = consumption
+      exi_p.first.consumption = consumption unless (prediction and consumption=0.0)
       exi_p.first.prediction = prediction
       exi_p.first.save
     end
