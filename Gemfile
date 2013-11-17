@@ -55,8 +55,5 @@ gem 'chartkick'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-# This version needs to be hardcoded for OpenShift compatibility
-gem 'thor', '= 0.14.6'
-
 # This needs to be installed so we can run Rails console on OpenShift directly
 gem 'minitest'
