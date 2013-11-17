@@ -10,9 +10,10 @@ Codejam2013dreamtim::Application.routes.draw do
   get 'predict', to: 'pages#machine'
   get 'bonus', to: 'pages#bonus'
   get 'pulse/:attr/:time', to: 'pages#pulse'
+  get 'graph', to: 'pages#graph'
   post 'csv', to: 'csv#upload'
   post 'predict', to: 'csv#upload'
-  post 'bonus', to: 'csv#uploadlocal'
+  post 'bonus', to: 'csv#uploadbonus'
   post 'settings', to: 'pages#set'
 
   # The priority is based upon order of creation: first created -> highest priority.
