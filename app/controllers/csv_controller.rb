@@ -68,12 +68,12 @@ class CsvController < ApplicationController
           array[last][Utils::Csv::WINDSPEED] = tmp[Utils::Csv::WINDSPEED]
         end
         result_interval= []
-        result_interval[0] = val[:interval][0] + prev_interval *(val[:val]-val[:interval][0])
-        result_interval[1] = val[:interval][1] + prev_interval *(val[:val]-val[:interval][1])
         prev_interval = prev_interval * (1 -(val[:val]-val[:interval][0]).abs/val[:val])
+        result_interval[0] = val[:val] - ((1-prev_interval) *val[:val])
+        result_interval[1] = val[:val] + ((1-prev_interval) *val[:val])
 
 
-        vals << val[:val].to_s+','+result_interval[0].to_s+','+result_interval[0].to_s
+        vals << val[:val].to_s+','+result_interval[0].to_s+','+result_interval[1].to_s
       end
     end
     vals
