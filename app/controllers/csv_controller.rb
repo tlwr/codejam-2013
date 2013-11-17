@@ -9,19 +9,14 @@ class CsvController < ApplicationController
       render :nothing => true, :status => 400
     else
       matrix = Utils::Algorithm::csv_to_matrix(file.read)
-      (0...matrix.row_size).each do |i|
-        puts matrix.get_row(i)[Utils::Csv::CONSUMPTION]
-      end
-      puts '-----------------'
-      render :text => matrix, :status => 200
+
+      render :text => get_missing_value(matrix), :status => 200
     end
   end
 
   def local
     file = File.open('sample_input.csv')
     matrix = (Utils::Algorithm::csv_to_matrix(file.read))
-    puts matrix
-    puts '==========================================='
     render :text => get_missing_value(matrix).join('<br/>'), :status => 200
   end
 
@@ -56,15 +51,15 @@ class CsvController < ApplicationController
           array[array.size-1][Utils::Csv::TEMPERATURE] = tmp[Utils::Csv::TEMPERATURE]
           array[array.size-1][Utils::Csv::WINDSPEED] = tmp[Utils::Csv::WINDSPEED]
         end
-        vals << val
+        vals << [array[Utils::Csv::DATE], val]
       else
         #p = Point::from_row(csv.row(i))
         #exi_p = Point.where(:date_record => p.date_record)
         #if exi_p.first.nil?
         #  p.save
         #elsif exi_p.first.prediction
-         # exi_p.value = p.value
-         # exi_p.save
+        # exi_p.value = p.value
+        # exi_p.save
         #end
       end
     end
