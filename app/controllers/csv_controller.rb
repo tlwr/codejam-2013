@@ -14,6 +14,18 @@ class CsvController < ApplicationController
     end
   end
 
+  def uploadbonus
+    file = params[:file]
+    if file.nil?
+      render :nothing => true, :status => 204
+    elsif file.class != ActionDispatch::Http::UploadedFile
+      render :nothing => true, :status => 400
+    else
+      matrix = Utils::Algorithm::csv_to_matrix(file.read)
+
+      render :text => get_missing_value(matrix), :status => 200
+  end
+
   def local
     file = File.open('sample_input.csv')
     matrix = (Utils::Algorithm::csv_to_matrix(file.read))

@@ -1,0 +1,7 @@
+<h1>bonus interface</h1>
+<label>Send a post request like so:</label>
+<pre><code>curl -F file=@filename.csv <%= request.original_url %></code></pre>
+<p>The first row of the CSV file contains the column headers, and rows after that should contain the data.</p>
+<pre><code>Date ISO-8601, Radiation, Humidity, Temperature, WindSpeed, Power</code></pre>
+<p>The following snippet contains the column headers of what will be returned.</p>
+<pre><code>Date ISO-8601, Lower 75% Confidence Interval (kW), Upper 75% Confidence Interval (kW)</code></pre>
