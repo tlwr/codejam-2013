@@ -28,6 +28,10 @@ class PagesController < ApplicationController
           raw.delete(r)
         end
       end
+
+      @max = @max*1.1
+      @min = @min*0.9
+
       @graph = raw.map { |m| [m[:date_record], m[:consumption]] }
       @both = [{:name => 'Actual', :data => @graph}, {:name => 'Predicted', :data => @pred}]
     end
