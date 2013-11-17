@@ -38,23 +38,23 @@ class CsvController < ApplicationController
     #Remove all existing prediction
     vals = []
     array = []
-
+    csv = Utils::Algorithm::fill_missing_values(csv)
     prev_interval = 1
     (0...csv.row_size).each do |i|
       row = csv.row(i).to_a
       array << row
       last = array.size-1
-
+      puts csv.row(i)
       if csv.row(i)[Utils::Csv::CONSUMPTION] == 0.0
         tmp = nil
         #Forget temporaly the data
-        if array[last][Utils::Csv::RADIATION] != 0.0
-          tmp = array[last].clone
-          array[last][Utils::Csv::RADIATION] = 0.0
-          array[last][Utils::Csv::HUMIDITY] = 0.0
-          array[last][Utils::Csv::TEMPERATURE] = 0.0
-          array[last][Utils::Csv::WINDSPEED] = 0.0
-        end
+        #if array[last][Utils::Csv::RADIATION] != 0.0
+        #  tmp = array[last].clone
+        #  array[last][Utils::Csv::RADIATION] = 0.0
+        #  array[last][Utils::Csv::HUMIDITY] = 0.0
+        #  array[last][Utils::Csv::TEMPERATURE] = 0.0
+        #  array[last][Utils::Csv::WINDSPEED] = 0.0
+        #end
         val = Utils::Algorithm.forcast_next_value(Matrix.rows(array), last)
         array[last][Utils::Csv::CONSUMPTION] = val[:val]
         #Replace the data
