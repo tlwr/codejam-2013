@@ -52,6 +52,12 @@ ActiveRecord::Schema.define(version: 20131116231201) do
 
   add_index "rails_admin_histories", ["item", "table", "month", "year"], name: "index_rails_admin_histories", using: :btree
 
+  create_table "settings", force: true do |t|
+    t.string  "name"
+    t.string  "svalue"
+    t.integer "ivalue"
+  end
+
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
