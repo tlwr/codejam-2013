@@ -5,7 +5,7 @@ require 'rufus/scheduler'
 
 
 task :load_pulse_energy => :environment do
-  Point.delete_all
+  #Point.delete_all
   run
 end
 
