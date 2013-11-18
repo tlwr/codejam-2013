@@ -1,7 +1,5 @@
 <div class='text-center'>
-  <h1>power usage</h1>
-
-  <p>predicted <strong><%= @power[:consumption] unless @power.nil? %></strong>kW at <%= @time.localtime.strftime('%H:%M') %></p>
+  <h1 style='font-weight:normal;'>prediction: <strong><%= @power[:consumption] unless @power.nil? %></strong>kW at <%= @time.localtime.strftime('%H:%M') %></h1>
 </div>
 
 <hr>
