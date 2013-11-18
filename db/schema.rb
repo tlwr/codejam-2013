@@ -55,9 +55,11 @@ ActiveRecord::Schema.define(version: 20131117214123) do
   add_index "rails_admin_histories", ["item", "table", "month", "year"], name: "index_rails_admin_histories", using: :btree
 
   create_table "settings", force: true do |t|
-    t.string  "name"
-    t.string  "svalue"
-    t.integer "ivalue"
+    t.string   "name"
+    t.string   "svalue"
+    t.integer  "ivalue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
