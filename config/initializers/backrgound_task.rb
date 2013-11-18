@@ -2,7 +2,7 @@ require 'rufus/scheduler'
 require 'net/http'
 
 Thread.new do
-  Pulse::run
+  #Pulse::run
 end
 
 
@@ -10,6 +10,7 @@ class Pulse
 
   def self.run
     logger.info  'running backgriund pulse'
+
     scheduler = Rufus::Scheduler.new
     scheduler.every '5m' do
       active =
