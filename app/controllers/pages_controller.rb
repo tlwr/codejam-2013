@@ -4,7 +4,7 @@ require 'uri'
 
 class PagesController < ApplicationController
   def index
-    @power = Point.where(prediction: true).order(date_record: :asc).first
+    @power = Point.where(prediction: true).order(date_record: :asc).last
     @time = @power[:date_record].advance(:hours => 1)
     raw = Point.order(date_record: :desc).limit(100).to_a
     if raw.nil? or raw.empty? then
