@@ -10,16 +10,17 @@
   <meta http-equiv="refresh" content="60">
   <%= line_chart @both, {:max => @max, :min => @min, :library => {:hAxis => {:title => 'Time'}, :vAxis => {:title => 'Consumption (kW)'}}} %>
 </div>
-
-<% if @power[:consumption] > highwatt %>
-  <hr>
-  <div class='text-center'>
-    <h3>warning: high power</h3>
-  </div>
-<% elsif @power[:consumption] < lowwatt %>
-  <hr>
-  <div class='text-center'>
-    <h3>warning: low power</h3>
-  </div>
+<% unless @power.nil? %>
+  <% if @power[:consumption] > highwatt %>
+    <hr>
+    <div class='text-center'>
+      <h3>warning: high power</h3>
+    </div>
+  <% elsif @power[:consumption] < lowwatt %>
+    <hr>
+    <div class='text-center'>
+      <h3>warning: low power</h3>
+    </div>
+  <% end %>
 <% end %>
 
