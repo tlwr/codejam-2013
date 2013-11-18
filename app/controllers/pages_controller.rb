@@ -4,9 +4,8 @@ require 'uri'
 
 class PagesController < ApplicationController
   def index
-    t = DateTime.now
-    @time = round_to_15_minutes t
-    @power = Point.find_by_date_record(@time)
+    @power = Point.where(prediction: true).order(date_record: :asc).first
+    @time = @power[:date_record].advance(:hours => 1)
     raw = Point.order(date_record: :desc).limit(100).to_a
     if raw.nil? or raw.empty? then
       render :text => 'We are currently grabbing data from pulse energy, please wait'
