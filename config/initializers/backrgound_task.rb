@@ -11,8 +11,7 @@ class Pulse
   def self.run
     puts 'running backgriund pulse'
     scheduler = Rufus::Scheduler.new
-    scheduler.every '1m' do
-      sleep(30)
+    scheduler.every '5m' do
       active = true
       puts 'Update pulse energy...'
       if active
